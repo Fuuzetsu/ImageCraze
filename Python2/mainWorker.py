@@ -4,10 +4,10 @@ import source.linkGenerator as linkGenerator
 import source.sourceParser as sourceParser
 import source.sourceRequester as sourceRequester
 import source.linkDownloader as linkDownloader
+import source.directoryCreator as directoryCreator
+import sys
 
 if __name__ == '__main__':
-	tag = 'cirno+cum'
-	saveDestination = '/home/shanachan/test - %s' % tag
 	listOfSites = {
 					'gelbooruCheck': 		1,
 					'konachanCheck': 		1,
@@ -18,6 +18,12 @@ if __name__ == '__main__':
 					'nekobooruCheck': 		1,
 					'moeImoutoCheck': 		1
 				}
+	if len(sys.argv) < 3:
+		print 'Not enough arguments. The arguments are save destination and a tag. Example:\nmainWorker.py /home/user/cirno/ cirno+rating:safe'
+		sys.exit(1)
+	else:
+		tag = sys.argv[2]
+		saveDestination = sys.argv[1]
 	
 	objectList = booruInitializer.initialize(listOfSites)
 	pageLinks = linkGenerator.generateLinks(objectList, tag)
@@ -36,8 +42,9 @@ if __name__ == '__main__':
 		print 'Visited %d out of %d pages so far. Got %d links to unique images so far.' % (visited, len(pageLinks[0]), len(imageLinkDictionary))
 	
 	downloaded = 0
+	directoryCreator.createDirectory(saveDestination)
 	for link in imageLinkDictionary.values():
-		linkDownloader.download(link, saveDestination)
+		linkDownloader.download(link)
 		downloaded += 1
 		print 'Downloaded %d out of %d images.' % (downloaded, len(imageLinkDictionary.values()))
 	
