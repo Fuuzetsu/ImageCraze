@@ -1,5 +1,10 @@
 #!/usr/bin/python
-import booruInitializer, linkGenerator, sourceParser, sourceRequester, linkDownloader
+import source.booruInitializer as booruInitializer
+import source.linkGenerator as linkGenerator
+import source.sourceParser as sourceParser
+import source.sourceRequester as sourceRequester
+import source.linkDownloader as linkDownloader
+
 if __name__ == '__main__':
 	tag = 'cirno+cum'
 	saveDestination = '/home/shanachan/test - %s' % tag
