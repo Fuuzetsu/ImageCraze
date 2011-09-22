@@ -3,7 +3,7 @@ import os
 import platform
 import urllib
 def download(saveDestination, sourceLink):
-	if platform.system == 'Linux':
+	if platform.system() == 'Linux':
 		os.system('wget -q -nc -P %s %s' % (saveDestination, sourceLink))
 	else:
 		originalDirectory = os.path.abspath(os.curdir)
@@ -14,12 +14,12 @@ def download(saveDestination, sourceLink):
             	#Download the file
 				try:
 					#Download the data and file size information
-					fileData = urllib.urlopen(linkToFile)
+					fileData = urllib.urlopen(sourceLink)
 					fileSize = int(fileData.headers['Content-Length'])
 					fileData = fileData.read()
 
 					#Obtain file name
-					saveFileTo = os.path.split(linkToFile)[1]
+					saveFileTo = os.path.split(sourceLink)[1]
 
 					#Save the file
 					fileSaveObject = open(saveFileTo, 'wb')
