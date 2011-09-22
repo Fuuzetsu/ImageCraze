@@ -10,7 +10,7 @@ def initialize(wantedSites):
 	"""
 	objectsToReturn = []
 
-	if wantedSites['gelbooruCheck'] == 1:
+	if wantedSites['gelbooruCheck']:
 		gelbooru = booruClass.Booru(
 						'Gelbooru',
 						'http://gelbooru.com/',
@@ -21,7 +21,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(gelbooru)
 
-	if wantedSites['konachanCheck'] == 1:
+	if wantedSites['konachanCheck']:
 		konachan = booruClass.Booru(
 						'Konachan',
 						'http://konachan.com/post/',
@@ -32,7 +32,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(konachan)
 
-	if wantedSites['ichijouCheck'] == 1:
+	if wantedSites['ichijouCheck']:
 		ichijou = booruClass.Booru(
 						'ichijou',
 						'http://ichijou.org/post/',
@@ -43,7 +43,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(ichijou)
 
-	if wantedSites['danbooruCheck'] == 1:
+	if wantedSites['danbooruCheck']:
 		danbooru = booruClass.Booru(
 						'Danbooru',
 						'http://danbooru.donmai.us/post/',
@@ -54,7 +54,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(danbooru)
 
-	if wantedSites['sankakuComplexCheck'] == 1:
+	if wantedSites['sankakuComplexCheck']:
 		sankakuComplex = booruClass.Booru(
 						'Sankaku Complex',
 						'http://chan.sankakucomplex.com/post/',
@@ -65,7 +65,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(sankakuComplex)
 
-	if wantedSites['safebooruCheck'] == 1:
+	if wantedSites['safebooruCheck']:
 		safebooru = booruClass.Booru(
 						'Safebooru',
 						'http://safebooru.org/',
@@ -76,7 +76,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(safebooru)
 
-	if wantedSites['nekobooruCheck'] == 1:
+	if wantedSites['nekobooruCheck']:
 		nekobooru = booruClass.Booru(
 						'Nekobooru',
 						'http://nekobooru.net/post/',
@@ -87,7 +87,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(nekobooru)
 
-	if wantedSites['moeImoutoCheck'] == 1:
+	if wantedSites['moeImoutoCheck']:
 		moeImouto = booruClass.Booru(
 						'Moe Imouto',
 						'http://oreno.imouto.org/post/',
@@ -103,14 +103,14 @@ def initialize(wantedSites):
 
 if __name__ == '__main__':
 	listOfSites = {
-						'gelbooruCheck': 		0,
-						'konachanCheck': 		0,
-						'ichijouCheck': 		1,
-						'danbooruCheck': 		0,
-						'sankakuComplexCheck': 0,
-						'safebooruCheck': 		0,
-						'nekobooruCheck': 		1,
-						'moeImoutoCheck': 		0
+						'gelbooruCheck': 		False,
+						'konachanCheck': 		False,
+						'ichijouCheck': 		True,
+						'danbooruCheck': 		False,
+						'sankakuComplexCheck': 	False,
+						'safebooruCheck': 		True,
+						'nekobooruCheck': 		True,
+						'moeImoutoCheck': 		False
 					}
 	obj = initialize(listOfSites)
 	for each in obj:

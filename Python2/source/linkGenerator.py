@@ -28,7 +28,10 @@ def generateLinks(listOfSiteObjects, tag):
 
 		elif obj.queryType == 'XML':
 			temporarySource = sourceRequester.getSource(obj.siteRoot + obj.siteQuery + tag + '&limit=1')
-			numberOfImages = int(re.search(r'<posts count="(\d+)" offset="0">', temporarySource).groups()[0])
+			try:
+				numberOfImages = int(re.search(r'<posts count="(\d+)" offset="0">', temporarySource).groups()[0])
+			except:
+				continue
 
 			totalNumberOfImages += numberOfImages
 		
