@@ -10,7 +10,7 @@ def initialize(wantedSites):
 	"""
 	objectsToReturn = []
 
-	if wantedSites['gelbooruCheck']:
+	if wantedSites['gelbooruCheck'].get():
 		gelbooru = booruClass.Booru(
 						'Gelbooru',
 						'http://gelbooru.com/',
@@ -21,7 +21,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(gelbooru)
 
-	if wantedSites['konachanCheck']:
+	if wantedSites['konachanCheck'].get():
 		konachan = booruClass.Booru(
 						'Konachan',
 						'http://konachan.com/post/',
@@ -32,7 +32,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(konachan)
 
-	if wantedSites['ichijouCheck']:
+	if wantedSites['ichijouCheck'].get():
 		ichijou = booruClass.Booru(
 						'ichijou',
 						'http://ichijou.org/post/',
@@ -43,7 +43,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(ichijou)
 
-	if wantedSites['danbooruCheck']:
+	if wantedSites['danbooruCheck'].get():
 		danbooru = booruClass.Booru(
 						'Danbooru',
 						'http://danbooru.donmai.us/post/',
@@ -54,7 +54,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(danbooru)
 
-	if wantedSites['sankakuComplexCheck']:
+	if wantedSites['sankakuComplexCheck'].get():
 		sankakuComplex = booruClass.Booru(
 						'Sankaku Complex',
 						'http://chan.sankakucomplex.com/post/',
@@ -65,7 +65,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(sankakuComplex)
 
-	if wantedSites['safebooruCheck']:
+	if wantedSites['safebooruCheck'].get():
 		safebooru = booruClass.Booru(
 						'Safebooru',
 						'http://safebooru.org/',
@@ -76,7 +76,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(safebooru)
 
-	if wantedSites['nekobooruCheck']:
+	if wantedSites['nekobooruCheck'].get():
 		nekobooru = booruClass.Booru(
 						'Nekobooru',
 						'http://nekobooru.net/post/',
@@ -87,7 +87,7 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(nekobooru)
 
-	if wantedSites['moeImoutoCheck']:
+	if wantedSites['moeImoutoCheck'].get():
 		moeImouto = booruClass.Booru(
 						'Moe Imouto',
 						'http://oreno.imouto.org/post/',
@@ -98,7 +98,6 @@ def initialize(wantedSites):
 						)
 		objectsToReturn.append(moeImouto)
 		
-
 	return objectsToReturn
 
 if __name__ == '__main__':
