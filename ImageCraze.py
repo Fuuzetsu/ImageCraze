@@ -4,7 +4,7 @@ import source.mainWorker as mainWorker
 import os
 import threading
 
-class App():
+class App:
 	def __init__(self, master):
 		self.frame = Frame(master)
 		self.frame.grid_propagate(False)
