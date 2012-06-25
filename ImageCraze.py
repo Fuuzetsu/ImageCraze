@@ -213,6 +213,7 @@ class App:
 			self.downloadButton['state'] = DISABLED
 			self.tagBox['state'] = DISABLED
 			self.saveDestinationBox['state'] = DISABLED
+                        self.numThreadBox['state'] = DISABLED
 			self.allButton['state'] = DISABLED
 			self.gelbooruCheck['state'] = DISABLED
 			self.konachanCheck['state'] = DISABLED
@@ -228,6 +229,7 @@ class App:
 			self.downloadButton['state'] = NORMAL
 			self.tagBox['state'] = NORMAL
 			self.saveDestinationBox['state'] = NORMAL
+                        self.numThreadBox['state'] = NORMAL
 			self.allButton['state'] = NORMAL
 			self.gelbooruCheck['state'] = NORMAL
 			self.konachanCheck['state'] = NORMAL

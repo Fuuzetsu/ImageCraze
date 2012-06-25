@@ -37,7 +37,7 @@ def work(appObject):
         # download images
         llink = list(imageLinkDictionary.values())
         l_thread = []
-        for i_thread in range(self.num_threads):
+        for i_thread in range(appObject.num_threads):
                 dl_thread = threading.Thread(target = downloadWorker, args = (appObject, llink))
                 l_thread.append(dl_thread)
                 dl_thread.start()
