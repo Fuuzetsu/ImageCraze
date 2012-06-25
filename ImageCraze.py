@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #Front-end interface for ImageCraze
 from Tkinter import *
 import source.mainWorker as mainWorker
