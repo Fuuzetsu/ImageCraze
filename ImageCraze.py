@@ -5,21 +5,27 @@ import source.mainWorker as mainWorker
 import os
 import threading
 
+
 class App:
 	def __init__(self, master):
+		self.cacheDestination = ''     # path to save those downloaded images
+                self.cacheTags = ''            # tags to filter images
+		self.cacheSites  = ''          # a copy of self.listOfSites (see below)
+		self.listOfSites = {
+				'gelbooruCheck': 	BooleanVar(),
+				'konachanCheck': 	BooleanVar(),
+				'ichijouCheck': 	BooleanVar(),
+				'danbooruCheck': 	BooleanVar(),
+				'sankakuComplexCheck':  BooleanVar(),
+				'safebooruCheck': 	BooleanVar(),
+				'nekobooruCheck': 	BooleanVar(),
+				'moeImoutoCheck': 	BooleanVar()
+                                }
+
+                ##################### UI stuffs #####################
 		self.frame = Frame(master)
 		self.frame.grid_propagate(False)
 		self.frame.grid()
-		self.listOfSites = {
-				'gelbooruCheck': 		BooleanVar(),
-				'konachanCheck': 		BooleanVar(),
-				'ichijouCheck': 		BooleanVar(),
-				'danbooruCheck': 		BooleanVar(),
-				'sankakuComplexCheck': 	BooleanVar(),
-				'safebooruCheck': 		BooleanVar(),
-				'nekobooruCheck': 		BooleanVar(),
-				'moeImoutoCheck': 		BooleanVar()
-			}
 		
 		#Checkboxes
 		self.gelbooruCheck = Checkbutton(master, text = 'Gelbooru', variable = self.listOfSites['gelbooruCheck'], command = self.entryBoxState)
@@ -31,7 +37,6 @@ class App:
 		self.nekobooruCheck = Checkbutton(master, text = 'Nekobooru', variable = self.listOfSites['nekobooruCheck'], command = self.entryBoxState)
 		self.moeImoutoCheck = Checkbutton(master, text = 'MoeImouto', variable = self.listOfSites['moeImoutoCheck'], command = self.entryBoxState)
 		
-
 		self.gelbooruCheck.grid(row = 1, column = 0, sticky = W+N)
 		self.konachanCheck.grid(row = 1, column = 2, sticky = W+N)
 		self.ichijouCheck.grid(row = 3, column = 2, sticky = W+N)
@@ -62,9 +67,6 @@ class App:
 		#Download button
 		self.downloadButton = Button(master, text = 'Download', state = DISABLED, command = self.startDownload)
 		self.downloadButton.grid(row = 6, column = 2)
-		self.cacheDestination = ''
-		self.cacheTags = ''
-		self.cacheSites  = ''
 
 		#Quit button
 		self.quitButton = Button(master, text = 'Quit', command = self.frame.quit)
@@ -73,6 +75,7 @@ class App:
 		#Message label
 		self.messageLabel = Label(master, text = '\nPick your download sources.\n')
 		self.messageLabel.grid(row = 0, column = 2, columnspan = 1)
+
 
 	def tickAll(self):
 		if self.tickAllVar:
@@ -154,6 +157,9 @@ class App:
 		for key in self.listOfSites.keys():
 			if self.listOfSites[key].get() == 1:
 				gotSource += 1
+
+                # maybe this one would be better?
+                # len([key for key in self.listOfSites.keys() if listOfSites[key].get == 1])
 
 		if gotSource == len(self.listOfSites.keys()):
 			self.saveDestinationBox['state'] = NORMAL
