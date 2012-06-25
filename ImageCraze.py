@@ -9,6 +9,7 @@ import threading
 class App:
 	def __init__(self, master):
                 self.is_running = False        # inform the worker thread (mainWorker.work) the cancellation of downloading
+                self.num_threads = 5           # number of downloader threads
 		self.cacheDestination = ''     # path to save those downloaded images
                 self.cacheTags = ''            # tags to filter images
 		self.cacheSites  = ''          # a copy of self.listOfSites (see below)
@@ -64,18 +65,24 @@ class App:
 		self.tagBox['width'] = 30
 		self.tagBox.grid(row = 5, column = 1, columnspan = 3, sticky = W+N)
 
+                # Num of downloading threads
+                Label(master, text = 'Number of threads: ').grid(column = 0, sticky = W+N)
+                self.numThreadBox = Entry(master, state = NORMAL)
+                self.numThreadBox['width'] = 4
+                self.numThreadBox.grid(row = 6, column = 1, sticky = W+N)
+                self.numThreadBox.insert(0, str(self.num_threads))   # set value to default number of threads
 		
 		#Download button
 		self.downloadButton = Button(master, text = 'Download', state = DISABLED, command = self.startDownload)
-		self.downloadButton.grid(row = 6, column = 0)
+		self.downloadButton.grid(row = 7, column = 0)
 
                 # Cancel button
 		self.cancelButton = Button(master, text = 'Cancel', state = DISABLED, command = self.cancelDownloading)
-		self.cancelButton.grid(row = 6, column = 2)
+		self.cancelButton.grid(row = 7, column = 2)
 
 		#Quit button
 		self.quitButton = Button(master, text = 'Quit', command = self.frame.quit)
-		self.quitButton.grid(row = 6, column = 3)
+		self.quitButton.grid(row = 7, column = 3)
 
 		#Message label
 		self.messageLabel = Label(master, text = '\nPick your download sources.\n')
@@ -88,6 +95,7 @@ class App:
 		emptyDestination = 0      # destination path is empty
 		wrongDestination = 0      # destination path is does not exist
 		notDestination = 0        # path specified does not lead to a  directory
+                nthreadNotInteger = 0     # number of threads is not an integer
 
                 # we need to get '~' properly expanded
                 save_dest = os.path.expanduser(self.saveDestinationBox.get())
@@ -96,19 +104,25 @@ class App:
 		if self.tagBox.get() == '':
 			emptyTag = 1
 
-		if self.saveDestinationBox.get() == '':
+		if save_dest == '':
 			emptyDestination = 1
 		elif not os.path.exists(save_dest):
 			wrongDestination = 1
 		elif not os.path.isdir(save_dest):
 			notDestination = 1
 
+                try:
+                        self.num_threads = int(self.numThreadBox.get())
+                except:
+                        nthreadNotInteger = 1
+
 		#Construct error message
 		error = ''
-		if emptyDestination: error += 'Nothing in destination box.\n '
-		if wrongDestination: error += 'Destination doesn\'t exist.\n '
-		if notDestination:   error += 'Destination is not a directory.\n '
-		if emptyTag:         error += 'Nothing in the tag box. '
+		if emptyDestination:  error += 'Nothing in destination box.\n '
+		if wrongDestination:  error += 'Destination doesn\'t exist.\n '
+		if notDestination:    error += 'Destination is not a directory.\n '
+                if nthreadNotInteger: error += 'Num of threads is not an integer.\n'
+		if emptyTag:          error += 'Nothing in the tag box. '
 
 		if not error == '':
 			self.messageLabel['foreground'] = 'red'
@@ -122,6 +136,7 @@ class App:
 			self.cacheTags = self.tagBox.get()
                         return True
 	
+
 	def startDownload(self):
                 if self.checkSetup():
                         workerThread = threading.Thread(target = mainWorker.work, args = (self,))
