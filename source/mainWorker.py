@@ -4,6 +4,7 @@ import linkGenerator
 import sourceParser
 import sourceRequester
 import linkDownloader
+import threading
 
 
 def work(appObject):
@@ -14,6 +15,7 @@ def work(appObject):
 	
 	imageLinkDictionary = {}
 
+        # gathering links to the images we want
 	visited = 0
 	for page in pageLinks[0]:
                 if appObject.is_running:
@@ -23,29 +25,29 @@ def work(appObject):
                         for key in currentPageDictionary.keys():
                                 if not key in imageLinkDictionary:
                                         imageLinkDictionary[key] = currentPageDictionary[key]
-                                        visited += 1
-                                        printToLabel(appObject, 'Visited %d out of %d pages so far.\nGot %d links to unique images so far.'
-                                                     % (visited, len(pageLinks[0]), len(imageLinkDictionary)), freeEndLine = 0)
+                        visited += 1
+                        printToLabel(appObject, 'Visited %d out of %d pages so far.\nGot %d links to unique images so far.' 
+                                     % (visited, len(pageLinks[0]), len(imageLinkDictionary)), freeEndLine = 0)
                 else:
                         # cancel button was hit
                         printToLabel(appObject, "Link gathering cancelled")
                         appObject.enabler('NORMAL')
                         return None
 	
-	downloaded = 0
+        # download images
+        llink = list(imageLinkDictionary.values())
+        l_thread = []
+        for i_thread in range(5):
+                dl_thread = threading.Thread(target = downloadWorker, args = (appObject, llink))
+                l_thread.append(dl_thread)
+                dl_thread.start()
 
-	for link in imageLinkDictionary.values():
-                if appObject.is_running:
-                        linkDownloader.download(appObject.cacheDestination, link)
-                        downloaded += 1
-                        printToLabel(appObject, 'Downloaded %d out of %d images.' % (downloaded, len(imageLinkDictionary.values())))
-                else:
-                        printToLabel(appObject, "Downloading cancelled")
-                        appObject.enabler('NORMAL')
-                        return None
-	
-	printToLabel(appObject, 'Finished.\nDownloaded %d images.' % downloaded, freeEndLine = 0)
+        for dl_thread in l_thread:
+                dl_thread.join()
+
+
 	appObject.enabler('NORMAL')
+        printToLabel(appObject, "Downloading terminated, %d links remaining" % (len(llink)))
 
 
 def printToLabel(mainApp, string, color = 'black', freeLine = 1, freeEndLine = 1):
@@ -55,3 +57,16 @@ def printToLabel(mainApp, string, color = 'black', freeLine = 1, freeEndLine = 1
 	mainApp.messageLabel['foreground'] = color
 	
 	
+def downloadWorker(app_obj, llink):
+        while len(llink) != 0:
+                if app_obj.is_running:
+                        try:
+                                link = llink.pop()
+                                linkDownloader.download(app_obj.cacheDestination, link)
+                                printToLabel(app_obj, "Downloading... %d links remaining" % (len(llink)))
+                        except:
+                                # llink is empty, this could happen due to some kind of race condition
+                                return None
+                else:
+                        printToLabel(app_obj, "Threads exiting due to cancellation, be patient...")
+                        return None
