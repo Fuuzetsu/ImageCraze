@@ -8,6 +8,7 @@ import threading
 
 class App:
 	def __init__(self, master):
+                self.is_running = False        # inform the worker thread (mainWorker.work) the cancellation of downloading
 		self.cacheDestination = ''     # path to save those downloaded images
                 self.cacheTags = ''            # tags to filter images
 		self.cacheSites  = ''          # a copy of self.listOfSites (see below)
@@ -66,7 +67,11 @@ class App:
 		
 		#Download button
 		self.downloadButton = Button(master, text = 'Download', state = DISABLED, command = self.startDownload)
-		self.downloadButton.grid(row = 6, column = 2)
+		self.downloadButton.grid(row = 6, column = 0)
+
+                # Cancel button
+		self.cancelButton = Button(master, text = 'Cancel', state = DISABLED, command = self.cancelDownloading)
+		self.cancelButton.grid(row = 6, column = 2)
 
 		#Quit button
 		self.quitButton = Button(master, text = 'Quit', command = self.frame.quit)
@@ -75,37 +80,6 @@ class App:
 		#Message label
 		self.messageLabel = Label(master, text = '\nPick your download sources.\n')
 		self.messageLabel.grid(row = 0, column = 2, columnspan = 1)
-
-
-	def tickAll(self):
-		if self.tickAllVar:
-			self.gelbooruCheck.select()
-			self.konachanCheck.select()
-			self.ichijouCheck.select()
-			self.danbooruCheck.select()
-			self.sankakuComplexCheck.select()
-			self.safebooruCheck.select()
-			self.nekobooruCheck.select()
-			self.moeImoutoCheck.select()
-			self.allButton['text'] = 'None'
-			self.tickAllVar = False
-			self.saveDestinationBox['state'] = NORMAL
-			self.tagBox['state'] = NORMAL
-                        self.downloadButton['state'] = NORMAL
-		else:
-			self.gelbooruCheck.deselect()
-			self.konachanCheck.deselect()
-			self.ichijouCheck.deselect()
-			self.danbooruCheck.deselect()
-			self.sankakuComplexCheck.deselect()
-			self.safebooruCheck.deselect()
-			self.nekobooruCheck.deselect()
-			self.moeImoutoCheck.deselect()
-			self.allButton['text'] = 'All'
-			self.tickAllVar = True		
-			self.saveDestinationBox['state'] = DISABLED
-			self.tagBox['state'] = DISABLED
-                        self.downloadButton['state'] = DISABLED
 			
 
         # Check if all settings were valid before downloading images
@@ -143,23 +117,61 @@ class App:
 		else:
 			self.messageLabel['foreground'] = 'green'
 			self.messageLabel['text'] = '\nAll checked out. Ready to go!\n'
-			self.downloadButton['state'] = NORMAL
 			self.cacheDestination = save_dest
 			self.cacheSites = self.listOfSites.copy()
 			self.cacheTags = self.tagBox.get()
                         return True
-			
+	
+	def startDownload(self):
+                if self.checkSetup():
+                        workerThread = threading.Thread(target = mainWorker.work, args = (self,))
+                        self.is_running = True
+                        workerThread.start()
 
-		
+        def cancelDownloading(self):
+                self.is_running = False    # We cannot forcely kill a thread in python, since there's no "official" way of doing
+                                           # this. So we have to inform the worker thread to terminate itself "gracefully"
+                self.messageLabel['text'] = 'Cancelling...'
+
+
+        # Callback for the "All" button
+	def tickAll(self):
+		if self.tickAllVar:
+			self.gelbooruCheck.select()
+			self.konachanCheck.select()
+			self.ichijouCheck.select()
+			self.danbooruCheck.select()
+			self.sankakuComplexCheck.select()
+			self.safebooruCheck.select()
+			self.nekobooruCheck.select()
+			self.moeImoutoCheck.select()
+			self.allButton['text'] = 'None'
+			self.tickAllVar = False
+			self.saveDestinationBox['state'] = NORMAL
+			self.tagBox['state'] = NORMAL
+                        self.downloadButton['state'] = NORMAL
+		else:
+			self.gelbooruCheck.deselect()
+			self.konachanCheck.deselect()
+			self.ichijouCheck.deselect()
+			self.danbooruCheck.deselect()
+			self.sankakuComplexCheck.deselect()
+			self.safebooruCheck.deselect()
+			self.nekobooruCheck.deselect()
+			self.moeImoutoCheck.deselect()
+			self.allButton['text'] = 'All'
+			self.tickAllVar = True		
+			self.saveDestinationBox['state'] = DISABLED
+			self.tagBox['state'] = DISABLED
+                        self.downloadButton['state'] = DISABLED
+
+
 	def entryBoxState(self):
 		#Check download sources and set saveDestinationBox and allButton states and variables
 		gotSource = 0
 		for key in self.listOfSites.keys():
 			if self.listOfSites[key].get() == 1:
 				gotSource += 1
-
-                # maybe this one would be better?
-                # len([key for key in self.listOfSites.keys() if listOfSites[key].get == 1])
 
 		if gotSource == len(self.listOfSites.keys()):
 			self.saveDestinationBox['state'] = NORMAL
@@ -180,12 +192,6 @@ class App:
 			self.allButton['text'] = 'All'
 			self.tickAllVar = True
 
-	
-	def startDownload(self):
-                if self.checkSetup():
-                        workerThread = threading.Thread(target = mainWorker.work, args = (self,))
-                        workerThread.start()
-
 
 	def enabler(self, enableRequest):
 		if enableRequest == 'DISABLED':
@@ -201,6 +207,8 @@ class App:
 			self.safebooruCheck['state'] = DISABLED
 			self.nekobooruCheck['state'] = DISABLED
 			self.moeImoutoCheck['state'] = DISABLED
+                        self.cancelButton['state'] = NORMAL
+
 		elif enableRequest == 'NORMAL':
 			self.downloadButton['state'] = NORMAL
 			self.tagBox['state'] = NORMAL
@@ -214,6 +222,7 @@ class App:
 			self.safebooruCheck['state'] = NORMAL
 			self.nekobooruCheck['state'] = NORMAL
 			self.moeImoutoCheck['state'] = NORMAL
+                        self.cancelButton['state'] = DISABLED
 
 if __name__ == '__main__':
 	root = Tk()

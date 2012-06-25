@@ -5,6 +5,7 @@ import sourceParser
 import sourceRequester
 import linkDownloader
 
+
 def work(appObject):
 	appObject.enabler('DISABLED')
 	printToLabel(appObject, 'Gathering links to all the pages...')
@@ -15,24 +16,37 @@ def work(appObject):
 
 	visited = 0
 	for page in pageLinks[0]:
-		pageSource = sourceRequester.getSource(page)
-		currentPageDictionary = sourceParser.parse(pageSource) 
+                if appObject.is_running:
+                        pageSource = sourceRequester.getSource(page)
+                        currentPageDictionary = sourceParser.parse(pageSource) 
 		
-		for key in currentPageDictionary.keys():
-			if not key in imageLinkDictionary:
-				imageLinkDictionary[key] = currentPageDictionary[key]
-		visited += 1
-		printToLabel(appObject, 'Visited %d out of %d pages so far.\nGot %d links to unique images so far.' % (visited, len(pageLinks[0]), len(imageLinkDictionary)), freeEndLine = 0)
+                        for key in currentPageDictionary.keys():
+                                if not key in imageLinkDictionary:
+                                        imageLinkDictionary[key] = currentPageDictionary[key]
+                                        visited += 1
+                                        printToLabel(appObject, 'Visited %d out of %d pages so far.\nGot %d links to unique images so far.'
+                                                     % (visited, len(pageLinks[0]), len(imageLinkDictionary)), freeEndLine = 0)
+                else:
+                        # cancel button was hit
+                        printToLabel(appObject, "Link gathering cancelled")
+                        appObject.enabler('NORMAL')
+                        return None
 	
 	downloaded = 0
 
 	for link in imageLinkDictionary.values():
-		linkDownloader.download(appObject.cacheDestination, link)
-		downloaded += 1
-		printToLabel(appObject, 'Downloaded %d out of %d images.' % (downloaded, len(imageLinkDictionary.values())))
+                if appObject.is_running:
+                        linkDownloader.download(appObject.cacheDestination, link)
+                        downloaded += 1
+                        printToLabel(appObject, 'Downloaded %d out of %d images.' % (downloaded, len(imageLinkDictionary.values())))
+                else:
+                        printToLabel(appObject, "Downloading cancelled")
+                        appObject.enabler('NORMAL')
+                        return None
 	
 	printToLabel(appObject, 'Finished.\nDownloaded %d images.' % downloaded, freeEndLine = 0)
 	appObject.enabler('NORMAL')
+
 
 def printToLabel(mainApp, string, color = 'black', freeLine = 1, freeEndLine = 1):
 	if freeLine == 1: string = '\n' + string
