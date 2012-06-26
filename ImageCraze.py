@@ -95,7 +95,7 @@ class App:
 		emptyDestination = 0      # destination path is empty
 		wrongDestination = 0      # destination path is does not exist
 		notDestination = 0        # path specified does not lead to a  directory
-                nthreadNotInteger = 0     # number of threads is not an integer
+                nthreadNotValid = 0       # number of threads is not an positive integer
 
                 # we need to get '~' properly expanded
                 save_dest = os.path.expanduser(self.saveDestinationBox.get())
@@ -113,15 +113,16 @@ class App:
 
                 try:
                         self.num_threads = int(self.numThreadBox.get())
+                        if self.num_threads <= 0: nthreadNotValid = 1   # num of threads must be positive
                 except:
-                        nthreadNotInteger = 1
+                        nthreadNotValid = 1
 
 		#Construct error message
 		error = ''
 		if emptyDestination:  error += 'Nothing in destination box.\n '
 		if wrongDestination:  error += 'Destination doesn\'t exist.\n '
 		if notDestination:    error += 'Destination is not a directory.\n '
-                if nthreadNotInteger: error += 'Num of threads is not an integer.\n'
+                if nthreadNotValid:   error += 'Num of threads is not an positive integer.\n'
 		if emptyTag:          error += 'Nothing in the tag box. '
 
 		if not error == '':

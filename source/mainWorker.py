@@ -37,11 +37,14 @@ def work(appObject):
         # download images
         llink = list(imageLinkDictionary.values())
         l_thread = []
+
+        # spawn multiple threads
         for i_thread in range(appObject.num_threads):
                 dl_thread = threading.Thread(target = downloadWorker, args = (appObject, llink))
                 l_thread.append(dl_thread)
                 dl_thread.start()
 
+        # wait for all threads to finish
         for dl_thread in l_thread:
                 dl_thread.join()
 
@@ -61,7 +64,7 @@ def downloadWorker(app_obj, llink):
         while len(llink) != 0:
                 if app_obj.is_running:
                         try:
-                                link = llink.pop()
+                                link = llink.pop()   # atomic operation
                                 linkDownloader.download(app_obj.cacheDestination, link)
                                 printToLabel(app_obj, "Downloading... %d links remaining" % (len(llink)))
                         except:
