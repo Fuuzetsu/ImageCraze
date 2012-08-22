@@ -38,6 +38,9 @@ class App:
 		self.safebooruCheck = Checkbutton(master, text = 'Safebooru', variable = self.listOfSites['safebooruCheck'], command = self.entryBoxState)
 		self.nekobooruCheck = Checkbutton(master, text = 'Nekobooru', variable = self.listOfSites['nekobooruCheck'], command = self.entryBoxState)
 		self.moeImoutoCheck = Checkbutton(master, text = 'MoeImouto', variable = self.listOfSites['moeImoutoCheck'], command = self.entryBoxState)
+
+		self.siteCheckBoxes = [self.gelbooruCheck, self.konachanCheck, self.ichijouCheck, self.danbooruCheck, self.sankakuComplexCheck,
+				   self.safebooruCheck, self.nekobooruCheck, self.moeImoutoCheck]
 		
 		self.gelbooruCheck.grid(row = 1, column = 0, sticky = W+N)
 		self.konachanCheck.grid(row = 1, column = 2, sticky = W+N)
@@ -153,28 +156,16 @@ class App:
 	# Callback for the "All" button
 	def tickAll(self):
 		if self.tickAllVar:
-			self.gelbooruCheck.select()
-			self.konachanCheck.select()
-			self.ichijouCheck.select()
-			self.danbooruCheck.select()
-			self.sankakuComplexCheck.select()
-			self.safebooruCheck.select()
-			self.nekobooruCheck.select()
-			self.moeImoutoCheck.select()
+			for checkbox in self.siteCheckBoxes:
+				checkbox.select()
 			self.allButton['text'] = 'None'
 			self.tickAllVar = False
 			self.saveDestinationBox['state'] = NORMAL
 			self.tagBox['state'] = NORMAL
 			self.downloadButton['state'] = NORMAL
 		else:
-			self.gelbooruCheck.deselect()
-			self.konachanCheck.deselect()
-			self.ichijouCheck.deselect()
-			self.danbooruCheck.deselect()
-			self.sankakuComplexCheck.deselect()
-			self.safebooruCheck.deselect()
-			self.nekobooruCheck.deselect()
-			self.moeImoutoCheck.deselect()
+			for checkbox in self.siteCheckBoxes:
+				checkbox.deselect()
 			self.allButton['text'] = 'All'
 			self.tickAllVar = True		
 			self.saveDestinationBox['state'] = DISABLED
@@ -216,14 +207,8 @@ class App:
 			self.saveDestinationBox['state'] = DISABLED
 			self.numThreadBox['state'] = DISABLED
 			self.allButton['state'] = DISABLED
-			self.gelbooruCheck['state'] = DISABLED
-			self.konachanCheck['state'] = DISABLED
-			self.ichijouCheck['state'] = DISABLED
-			self.danbooruCheck['state'] = DISABLED
-			self.sankakuComplexCheck['state'] = DISABLED
-			self.safebooruCheck['state'] = DISABLED
-			self.nekobooruCheck['state'] = DISABLED
-			self.moeImoutoCheck['state'] = DISABLED
+			for checkbox in self.siteCheckBoxes:
+				checkbox['state'] = DISABLED
 			self.cancelButton['state'] = NORMAL
 
 		elif enableRequest == 'NORMAL':
@@ -232,14 +217,8 @@ class App:
 			self.saveDestinationBox['state'] = NORMAL
 			self.numThreadBox['state'] = NORMAL
 			self.allButton['state'] = NORMAL
-			self.gelbooruCheck['state'] = NORMAL
-			self.konachanCheck['state'] = NORMAL
-			self.ichijouCheck['state'] = NORMAL
-			self.danbooruCheck['state'] = NORMAL
-			self.sankakuComplexCheck['state'] = NORMAL
-			self.safebooruCheck['state'] = NORMAL
-			self.nekobooruCheck['state'] = NORMAL
-			self.moeImoutoCheck['state'] = NORMAL
+			for checkbox in self.siteCheckBoxes:
+				checkbox['state'] = NORMAL
 			self.cancelButton['state'] = DISABLED
 
 if __name__ == '__main__':
