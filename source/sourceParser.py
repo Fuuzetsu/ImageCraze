@@ -1,21 +1,13 @@
 #!/usr/bin/python
 import xml.dom.minidom, json, os
-def parserXML(xmlsource):
-	temporaryFile = open('temp.xml', 'w')
-	temporaryFile.write(xmlsource)
-	temporaryFile.close()
-	temporaryFile = open('temp.xml', 'r')
-	doc = xml.dom.minidom.parse(temporaryFile)
-	mapping = {}
-	 
-	for node in doc.getElementsByTagName('post'):
-	  link = node.getAttribute('file_url')
-	  md5 = node.getAttribute('md5')
-	  mapping[md5] = link
-	temporaryFile.close()
-	os.remove('temp.xml')
-
-	return mapping
+from lxml import etree
+from StringIO import *
+def parserXML(source):  
+    mapping = {}
+    for ev, el in etree.iterparse(StringIO(source)):
+	    if el.tag == 'post':
+		        mapping[el.attrib['md5']] = el.attrib['file_url']
+    return mapping
 
 def parserJSON(jsonsource):
 	split = json.loads(jsonsource)
