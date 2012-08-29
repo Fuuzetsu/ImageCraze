@@ -90,6 +90,8 @@ class App:
 		#Message label
 		self.messageLabel = Label(master, text = '\nPick your download sources.\n')
 		self.messageLabel.grid(row = 0, column = 2, columnspan = 1)
+
+		self.tickAll()
 			
 
 	# Check if all settings were valid before downloading images
