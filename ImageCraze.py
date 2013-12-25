@@ -60,7 +60,7 @@ class App:
                                                   'moeImoutoCheck'], command=self.entryBoxState)
 
                 self.siteCheckBoxes = [
-                    self.gelbooruCheck, self.konachanCheck, self.ichijouCheck, self.danbooruCheck, self.sankakuComplexCheck,
+                    self.gelbooruCheck, self.konachanCheck, self.ichijouCheck, self.sankakuComplexCheck,
                     self.safebooruCheck, self.nekobooruCheck, self.moeImoutoCheck]
 
                 self.gelbooruCheck.grid(row=1, column=0, sticky=W + N)
@@ -123,6 +123,11 @@ class App:
                 self.messageLabel = Label(
                     master, text='\nPick your download sources.\n')
                 self.messageLabel.grid(row=0, column=2, columnspan=1)
+
+                # Disable danbooru due to API changes until this program is
+                # reworked
+                self.danbooruCheck.deselect()
+                self.danbooruCheck['state'] = DISABLED
 
                 self.tickAll()
 
