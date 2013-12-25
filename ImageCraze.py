@@ -181,7 +181,7 @@ class App:
                             'text'] = '\nAll checked out. Ready to go!\n'
                         self.cacheDestination = save_dest
                         self.cacheSites = self.listOfSites.copy()
-                        self.cacheTags = self.tagBox.get()
+                        self.cacheTags = self.tagBox.get().replace(' ', '+')
                         return True
 
         def startDownload(self):
