@@ -60,7 +60,7 @@ class App:
                                                   'moeImoutoCheck'], command=self.entryBoxState)
 
                 self.siteCheckBoxes = [
-                    self.gelbooruCheck, self.konachanCheck, self.ichijouCheck, self.sankakuComplexCheck,
+                    self.gelbooruCheck, self.konachanCheck, self.ichijouCheck,
                     self.safebooruCheck, self.nekobooruCheck, self.moeImoutoCheck]
 
                 self.gelbooruCheck.grid(row=1, column=0, sticky=W + N)
@@ -128,6 +128,8 @@ class App:
                 # reworked
                 self.danbooruCheck.deselect()
                 self.danbooruCheck['state'] = DISABLED
+                self.sankakuComplexCheck.deselect()
+                self.sankakuComplexCheck['state'] = DISABLED
 
                 self.tickAll()
 
