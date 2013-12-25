@@ -1,11 +1,10 @@
 #!/usr/bin/python
-import booruInitializer
-import linkGenerator
-import sourceParser
-import sourceRequester
-import linkDownloader
+import source.booruInitializer as booruInitializer
+import source.linkGenerator as linkGenerator
+import source.sourceParser as sourceParser
+import source.sourceRequester as sourceRequester
+import source.linkDownloader as linkDownloader
 import threading
-
 
 def work(appObject):
         appObject.enabler('DISABLED')
@@ -20,6 +19,7 @@ def work(appObject):
         for page in pageLinks[0]:
                 if appObject.is_running:
                         pageSource = sourceRequester.getSource(page)
+
                         currentPageDictionary = sourceParser.parse(pageSource)
 
                         for key in currentPageDictionary.keys():

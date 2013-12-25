@@ -2,7 +2,22 @@
 """
 This module requests the web page and returns source.
 """
-import urllib
+
+# Python 2/3 hacks
+urlmodule = None
+import sys
+if sys.version_info[0] == 2:
+        import urllib2
+        urlmodule = urllib2
+else:
+        import urllib.request
+        urlmodule = urllib.request
+
+def replace_spaces(x):
+    """
+    Temporary function to hack up links with spaces to links with %20
+    """
+    return x.replace(' ', '%20')
 
 def getSource(link):
         if link.find('http://') < 0:
@@ -10,11 +25,16 @@ def getSource(link):
 
         source = ''
         tried = 0
-        while tried < 4:
+        max_tries = 3
+        while tried <= max_tries:
                 try:
-                        source = urllib.urlopen(link).read()
-                except:
-                        tried += 1
+                        source = urlmodule.urlopen(replace_spaces(link)).read()
+                except urlmodule.URLError as e:
+                        if tried >= max_tries:
+                            raise
+                        else:
+                            print('URLError on %s' % link)
+                            tried += 1
                         continue
                 break
 

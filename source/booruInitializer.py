@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import booruClass
+import source.booruClass as booruClass
 
 def initialize(wantedSites):
         """
@@ -113,4 +113,4 @@ if __name__ == '__main__':
                                         }
         obj = initialize(listOfSites)
         for each in obj:
-                print each.siteName + ' - ' + each.queryType
+                print(each.siteName + ' - ' + each.queryType)

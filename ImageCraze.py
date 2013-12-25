@@ -1,10 +1,16 @@
 #!/usr/bin/python
 #Front-end interface for ImageCraze
-from Tkinter import *
-import source.mainWorker as mainWorker
+
+import sys
 import os
 import threading
 
+if sys.version_info[0] == 2:
+        from Tkinter import *
+else:
+        from tkinter import *
+
+import source.mainWorker as mainWorker
 
 class App:
         def __init__(self, master):
