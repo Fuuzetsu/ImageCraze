@@ -13,11 +13,13 @@ else:
         import urllib.request
         urlmodule = urllib.request
 
+
 def replace_spaces(x):
     """
     Temporary function to hack up links with spaces to links with %20
     """
     return x.replace(' ', '%20')
+
 
 def getSource(link):
         if link.find('http://') < 0:

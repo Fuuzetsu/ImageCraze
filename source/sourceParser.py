@@ -1,5 +1,7 @@
 #!/usr/bin/python
-import xml.dom.minidom, json, os
+import xml.dom.minidom
+import json
+import os
 from lxml import etree
 
 import sys
@@ -27,6 +29,7 @@ def parserXML(source):
             if el.tag == 'post':
                         mapping[el.attrib['md5']] = el.attrib['file_url']
     return mapping
+
 
 def parserJSON(jsonsource):
         split = json.loads(jsonsource)

@@ -27,9 +27,11 @@ def download(saveDestination, sourceLink):
         # test if wget is avaliable on our system
         if which('wget') is not None:
                 # we prefer using wget as our downloading tool
-                os.system('wget -q -nc -P %s %s' % (saveDestination, sourceLink))
+                os.system('wget -q -nc -P %s %s' %
+                          (saveDestination, sourceLink))
         else:
-                # since wget is not avaliable for now, we have to do this on our own
+                # since wget is not avaliable for now, we have to do this on
+                # our own
                 originalDirectory = os.path.abspath(os.curdir)
                 os.chdir(saveDestination)
                 tried = 0
@@ -39,7 +41,8 @@ def download(saveDestination, sourceLink):
                         try:
                                 # Download the data and file size information
                                 fileData = urllib.urlopen(sourceLink)
-                                fileSize = int(fileData.headers['Content-Length'])
+                                fileSize = int(
+                                    fileData.headers['Content-Length'])
                                 fileData = fileData.read()
 
                                 # Obtain file name
